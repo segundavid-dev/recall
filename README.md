@@ -114,6 +114,40 @@ VITE_FIREBASE_APP_ID=
 
 ---
 
+## Recall - Deployed on AWS Cloud
+
+## AWS Infrastructure Plan
+![Infrastructure diagram](./images/recall.png)
+
+## Tools and Services Used
+
+* **Linux:** Fedora Workstation 44 (local) and Ubuntu 22.04+ (AWS EC2)
+* **Scripting:** Bash Scripting & Python
+* **AWS Services:** EC2, IAM, Cloudfront, ACM, Route53, VPC, ALB, S3
+* **Cloud Automation:** Terraform
+* **Server Automation:** Ansible
+* **Others:** Nginx, Docker
+
+## Getting Started
+
+1. Rename the `example_recall_config.json` file to `recall_config.json`.
+2. Fill in the required configuration fields within the new file.
+3. Verify you have set up all prerequisites outlined in the [How to Run Guide](./deployend/documentation/how_to_run.md).
+4. Once everything is configured, run the main script:
+
+```bash
+python main.py
+```
+
+The script will handle the rest of the deployment!
+
+---
+*Thanks!*  
+   
+![AWS Infrastructure Plan](./deployend/documentation/images/recall.png)
+
+---
+
 <div align="center">
 
  Made with Cognee 🧠

@@ -1,0 +1,93 @@
+---
+- name: Configure server
+  hosts: server
+  become: true
+
+  vars:
+    webservice: nginx
+    web_root: "/var/www/html"
+
+  vars_files:
+    - ../../../recall_config.json
+
+  tasks:
+
+    - name: Update apt package cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install Nginx and AWS CLI
+      ansible.builtin.apt:
+        name:
+          - "{{ webservice }}"
+          - awscli
+        state: present
+
+    - name: Remove default Nginx site
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Ensure web root exists
+      ansible.builtin.file:
+        path: "{{ web_root }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: "0755"
+
+    - name: Download frontend build from S3
+      ansible.builtin.command:
+        cmd: >
+          aws s3 sync
+          s3://{{ deployend.existing_s3_bucket }}/
+          {{ web_root }}/
+          --delete
+      register: frontend_sync
+      changed_when: frontend_sync.stdout | length > 0
+      notify: Restart Nginx
+
+    - name: Create Nginx site configuration
+      ansible.builtin.copy:
+        dest: /etc/nginx/sites-available/recall_server
+        content: |
+          server {
+              listen 80;
+              listen [::]:80;
+
+              server_name _;
+
+              root /var/www/html;
+              index index.html;
+
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+          }
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Restart Nginx
+
+    - name: Enable Nginx site
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/recall_server
+        dest: /etc/nginx/sites-enabled/recall_server
+        state: link
+      notify: Restart Nginx
+
+    - name: Validate Nginx configuration
+      ansible.builtin.command:
+        cmd: nginx -t
+      changed_when: false
+
+    - name: Enable Nginx
+      ansible.builtin.systemd:
+        name: "{{ webservice }}"
+        enabled: true
+
+  handlers:
+    - name: Restart Nginx
+      ansible.builtin.systemd:
+        name: "{{ webservice }}"
+        state: restarted
