@@ -5,8 +5,6 @@
 - **[Home](../../README.md)**
 - **How to Run**
 - **[Setup Script for Ubuntu](./scripts/ubuntu_setup.sh)**
-- **[Files and Directories](./files_and_dirs.md)**
-- **[Watch on YouTube (Walkthrough)](https://youtu.be/87a8WYM-Chc)**
 
 ---
 Follow the steps below to deploy the project successfully.
