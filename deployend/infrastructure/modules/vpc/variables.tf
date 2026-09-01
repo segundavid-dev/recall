@@ -16,7 +16,6 @@ variable "private_subnets_name" {
   type = list(string)
   default = [
     "r-private-a1-subnet",
-    "r-private-a2-subnet",
     "r-private-b1-subnet",
     "r-private-c1-subnet"
   ]
@@ -25,7 +24,6 @@ variable "private_subnets_name" {
 variable "private_subnets_cidr_block" {
   type = list(string)
   default = [
-    "10.0.4.0/24",
     "10.0.5.0/24",
     "10.0.6.0/24",
     "10.0.7.0/24"
@@ -35,7 +33,6 @@ variable "private_subnets_cidr_block" {
 variable "private_subnets_az" {
   type = list(string)
   default = [
-    "us-east-1a",
     "us-east-1a",
     "us-east-1b",
     "us-east-1c"
@@ -48,6 +45,7 @@ variable "private_subnets_az" {
 variable "public_subnets_name" {
   type = list(string)
   default = [
+    "r-public-a1-subnet",
     "r-public-b1-subnet",
     "r-public-c1-subnet",
     "r-public-d1-subnet"
@@ -60,15 +58,17 @@ variable "public_subnets_cidr_block" {
     "10.0.1.0/24",
     "10.0.2.0/24",
     "10.0.3.0/24",
+    "10.0.4.0/24"
   ]
 }
 
 variable "public_subnets_az" {
   type = list(string)
   default = [
+    "us-east-1a",
     "us-east-1b",
     "us-east-1c",
-    "us-east-1d",
+    "us-east-1d"
   ]
 }
 

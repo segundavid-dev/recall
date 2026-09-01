@@ -2,7 +2,7 @@
 
 ## Navigation
 
-- **[Home](../README.md)**
+- **[Home](../../README.md)**
 - **How to Run**
 - **[Setup Script for Ubuntu](./scripts/ubuntu_setup.sh)**
 - **[Files and Directories](./files_and_dirs.md)**

@@ -64,7 +64,7 @@ module "api_gateway" {
   source = "./modules/api_gateway" 
  
   target_backend_instance_id             = module.backend_server.recall_backend_instance_id
-  private_subnet_ids                     = [module.vpc.private_subnet_b1_id, module.vpc.private_subnet_a2_id]
+  private_subnet_ids                     = [module.vpc.public_subnet_a1_id, module.vpc.public_subnet_d1_id]
   internal_security_group_id             = module.security_groups.internal_alb_sg
   vpc_id                                 = module.vpc.vpc_id
 }

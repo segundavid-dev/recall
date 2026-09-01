@@ -70,23 +70,23 @@ resource "aws_route53_record" "acm_validation" {
 
 
 
-resource "aws_route53_zone" "private" {
-  name = "internal.${var.hosted_zone_name}"
+# resource "aws_route53_zone" "private" {
+#   name = "internal.${var.hosted_zone_name}"
 
-  vpc {
-    vpc_id = var.vpc_id
-  }
+#   vpc {
+#     vpc_id = var.vpc_id
+#   }
 
-  tags = merge(var.tags, {
-    Name = "internal.${var.hosted_zone_name}"
-  })
-}
+#   tags = merge(var.tags, {
+#     Name = "internal.${var.hosted_zone_name}"
+#   })
+# }
 
 
 resource "aws_route53_record" "backend" {
-  zone_id = aws_route53_zone.private.zone_id
+  zone_id = data.aws_route53_zone.existing_hosted_zone.zone_id
 
-  name = "backend.internal.${var.hosted_zone_name}"
+  name = "internal.${var.hosted_zone_name}"
   type = "A"
 
   alias {
