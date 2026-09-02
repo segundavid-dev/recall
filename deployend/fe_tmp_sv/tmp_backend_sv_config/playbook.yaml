@@ -1,0 +1,106 @@
+---
+- name: Deploy Docker and Recall Service
+  hosts: all
+  become: true
+
+  vars:
+    app_dir: "/home/ubuntu/recall"
+    app_user: "ubuntu"
+
+  vars_files:
+    - ../../../recall_config.json
+
+  tasks:
+    - name: Remove conflicting Docker packages
+      ansible.builtin.apt:
+        name:
+          - docker.io
+          - docker-compose
+          - docker-compose-v2
+          - docker-doc
+          - docker-buildx
+          - podman-docker
+          - containerd
+          - runc
+        state: absent
+
+    - name: Install prerequisite packages
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - git
+        state: present
+        update_cache: true
+
+    - name: Create keyrings directory
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Download Docker GPG key
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: '0644'
+
+    - name: Add Docker APT repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+        filename: docker
+
+    - name: Install Docker packages
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: true
+
+    - name: Ensure Docker service is running and enabled
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Clone the repository
+      ansible.builtin.git:
+        repo: "https://github.com/chieoms/recall.git"
+        dest: "{{ app_dir }}"
+        version: main
+        force: true
+    - name: Create backend environment configuration file
+      ansible.builtin.copy:
+        dest: "{{ app_dir }}/backend/.env"
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0600'
+        content: |
+          DATABASE_URL={{ backend.database_url }}
+          REDIS_URL={{ backend.redis_url }}
+          OPENAI_API_KEY={{ backend.openai_api_key }}
+          LLM_API_KEY={{ backend.llm_api_key }}
+          CLOUDINARY_CLOUD_NAME={{ backend.cloudinary_cloud_name }}
+          CLOUDINARY_API_KEY={{ backend.cloudinary_api_key }}
+          CLOUDINARY_API_SECRET={{ backend.cloudinary_api_secret }}
+          FIREBASE_SERVICE_ACCOUNT_JSON={{ backend.firebase_service_account_json }}
+          COGNEE_VECTOR_DB_URL={{ backend.cognee_vector_db_url }}
+          COGNEE_GRAPH_DB_URL={{ backend.cognee_graph_db_url }}
+
+    - name: Set ownership on application directory
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        recurse: true
+
+    - name: Deploy Docker Compose stack
+      ansible.builtin.command:
+        cmd: docker compose -f {{ app_dir }}/backend/docker-compose.yml up -d --build
+      args:
+        chdir: "{{ app_dir }}/backend"

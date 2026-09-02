@@ -6,12 +6,14 @@ recall_postman_collection.json
 
 
 frontend/node_modules
+frontend/dist
 frontend/package-lock.json
 
 # Frontend env (keep .env.example tracked)
 frontend/.env
 frontend/.env.local
 frontend/.env.*.local
+
 # Python
 __pycache__/
 *.pyc
@@ -20,3 +22,28 @@ backend/migrate_graph.py
 backend/test_search_chunks.py
 backend/test_search.py
 backend/wipe_data.py
+
+# Deployend
+recall_config.json
+.fe_tmp_sv_outputs.json
+
+deployend/logs
+deployend/fe_tmp_sv/tmp_sv/.ssh_keys
+deployend/fe_tmp_sv/tmp_sv/.terraform
+deployend/fe_tmp_sv/tmp_sv/terraform.tfstate.backup
+deployend/fe_tmp_sv/tmp_sv/terraform.tfstate
+deployend/fe_tmp_sv/tmp_sv_config/.tmp_sv_key
+deployend/fe_tmp_sv/tmp_sv_config/inventory
+deployend/fe_tmp_sv/tmp_backend_sv_config/.tmp_sv_key
+deployend/fe_tmp_sv/tmp_backend_sv_config/inventory
+
+deployend/infrastructure/.ssh_keys
+deployend/infrastructure/.terraform
+deployend/infrastructure/logs
+deployend/infrastructure/backend_userdata.sh
+deployend/infrastructure/.recall_outputs.json
+deployend/infrastructure/terraform.tfstate.backup
+deployend/infrastructure/terraform.tfstate
+frontend/.env.local.sp
+deployend/py_main_modules/__pycache__
+sssss
