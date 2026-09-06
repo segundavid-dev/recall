@@ -199,8 +199,8 @@ resource "aws_vpc_security_group_ingress_rule" "internal_alb_http_access_ipv4" {
   security_group_id            = aws_security_group.internal_alb_sg.id
   referenced_security_group_id = aws_security_group.frontend_sg.id
   ip_protocol                  = "tcp"
-  from_port                    = 8001
-  to_port                      = 8001
+  from_port                    = 443
+  to_port                      = 443
 }
 
 

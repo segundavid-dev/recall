@@ -1,19 +1,22 @@
 # How to Run
 
-## Navigation
-
-- **[Home](../../README.md)**
+## Quick Links
+- **[Root Readme](../../README.md)**
 - **How to Run**
-- **[Setup Script for Ubuntu](./scripts/ubuntu_setup.sh)**
+- **[Deployend Readme](../README.md)**
+- [Setup Script for Ubuntu](./scripts/ubuntu_setup.sh)
 
 ---
-Follow the steps below to deploy the project successfully.
+
+Follow the steps below to set up and deploy the project successfully.
 
 ## 1. Create an AWS Account
 
-If you don't already have an AWS account, create one here:
+If you do not already have an AWS account, create one before continuing.
 
-- **AWS Account Registration:** https://signin.aws.amazon.com/signup?request_type=register
+**AWS Account Registration:**
+
+https://signin.aws.amazon.com/signup?request_type=register
 
 ---
 
@@ -27,109 +30,200 @@ Purchase a domain name from any domain registrar, such as:
 - Cloudflare Registrar
 - Any other domain registrar
 
-### If you use Amazon Route 53
+### If You Use Amazon Route 53
 
-Create a **Hosted Zone** for your domain.
+Create a **Public Hosted Zone** for your domain.
 
-### If you use another registrar (GoDaddy, Namecheap, etc.)
+### If You Use Another Domain Registrar
 
-Update your domain's **nameservers** to the nameservers provided by your Route 53 Hosted Zone so that AWS can manage your DNS records.
+If your domain is registered with GoDaddy, Namecheap, Cloudflare, or another registrar:
 
-> **Note:** This step is required for this project.
+1. Create a **Public Hosted Zone** for your domain in Amazon Route 53.
+2. Copy the nameservers provided by the Route 53 Hosted Zone.
+3. Update the nameservers at your domain registrar.
 
-See the nameserver configuration walkthrough here:
+This allows AWS Route 53 to manage the DNS records for your domain.
 
-- **Walkthrough:** *(will be added later)*
+> **Note:** This step is required for this project because Route 53 is used to manage the project's DNS records.
+
+A nameserver configuration walkthrough video will be added later.
 
 ---
 
-## 3. Install Required Tools
+## 3. Install the Required Tools
 
-An installation script is provided for **Ubuntu 22.04+**.
-[see script](./scripts/ubuntu.sh)
+An installation script is provided for **Ubuntu 22.04 and later**.
+
+See the installation script:
+
+[Setup Script for Ubuntu](./scripts/ubuntu_setup.sh)
 
 The script installs:
+
 - Python 3
 - Git
 - Terraform
 - AWS CLI v2
 - Ansible
+- Node.js
+- pnpm
 
 ---
 
-## 4. Configure AWS CLI
+## 4. Configure the AWS CLI
 
-Create an **IAM User** with the required permissions and generate an **Access Key**.
+Create an AWS IAM user with the permissions required to deploy the infrastructure.
 
-Configure the AWS CLI:
+Generate an **Access Key** for the IAM user, then configure the AWS CLI:
 
 ```bash
 aws configure
 ```
 
-Enter the following when prompted:
+You will be prompted to enter:
 
 - AWS Access Key ID
 - AWS Secret Access Key
 - Default AWS Region
-- Default output format (optional)
+- Default output format
 
 ---
 
 ## 5. Clone the Repository
 
-```bash
-git clone repository-url
-cd repository-folder
-```
+Clone the repository and move into the project directory:
 
 ---
 
 ## 6. Configure the Project
 
-rename `example_recall_config.json` to `recall_config.json:
+Rename:
 
-Update the configuration values to match your environment before deploying. It will generate ENV variables for the `frontend` and `backend` directory.
+```text
+example_recall_config.json
+```
+
+to:
+
+```text
+recall_config.json
+```
+
+Then update the configuration values to match your environment.
+
+The deployment process uses this configuration to generate the required environment variables and configuration for the `frontend` and `backend` directories.
+
+For instructions on running the project locally, see:
+
+- [Root README](../../README.md)
+- [Frontend Documentation](../../frontend/README.md)
+- [Backend Documentation](../../backend/README.md)
 
 ---
 
-## 7. Deploy the Infrastructure
+## 7. Configure Firebase
 
-Run:
+Before deployment, configure Firebase Authentication.
+
+### Add Your Domain to Firebase Authorized Domains
+
+Add the domain name used by the project to **Firebase Authentication → Settings → Authorized domains**.
+
+`localhost` is included by default for local development.
+
+![Add domain to Firebase authorized domains](./images/firebase_add_domain_name.png)
+
+### Enable Email/Password Authentication
+
+Enable the **Email/Password** sign-in provider:
+
+```text
+Firebase Authentication
+    └── Sign-in method
+          └── Email/Password
+```
+
+![Enable Email/Password](./images/firebase_enable_email.png)
+
+The Firebase project's service account JSON must also be configured as:
+
+```text
+FIREBASE_SERVICE_ACCOUNT_JSON
+```
+
+on the backend so that it can verify Firebase ID tokens sent by the application.
+
+You can find the Firebase Web App configuration under:
+
+```text
+Project Settings
+    └── General
+          └── Your apps
+                └── Web app
+```
+
+---
+
+## 8. Deploy the Infrastructure
+
+Once the required tools and configuration have been completed, run:
 
 ```bash
 python3 main.py
 ```
 
-This script will:
+The deployment script automates the deployment process and will:
 
 - Provision the AWS infrastructure
-- Configure the EC2 instance (servers)
-- Deploy the website
+- Configure the EC2 instances
+- Build and deploy the frontend
+- Configure the required services
+- Deploy the application
 
 ---
 
-## 8. Destroy the Infrastructure
+## 9. View Deployment Logs
 
-To remove all resources created by the project, run:
+Deployment logs are available in:
+
+```text
+deployend/logs/
+```
+
+These logs can be useful when troubleshooting deployment or configuration issues.
+
+---
+
+## 10. Destroy the Infrastructure
+
+To remove the AWS resources created by the project, run:
 
 ```bash
 python3 destroy.py
 ```
 
----
-
-## 9. View Logs
-
-Deployment logs are available in the `deployend/logs/` directory.
-
-Use these logs to monitor progress or troubleshoot issues.
+This script should be used when you want to clean up the infrastructure created during deployment.
 
 ---
 
+# Important Notes
 
-# Notes
+- Ensure that the domain name used by the project is added to **Firebase Authorized Domains**.
+- Ensure that **Email/Password & Google** authentication is enabled in Firebase Authentication.
+- Ensure that the correct Firebase service account configuration is provided to the backend.
+- Make sure your AWS CLI credentials are configured before running the deployment script.
+- Make sure your S3 Bucket and Route 53 Hosted Zone is correctly configured before deployment.
 
-- Do **not** manually delete files or directories created by the application.
-- Avoid deleting files listed in `.gitignore`, as they are automatically created and managed by the deployment scripts.
-- Always use `python3 destroy.py` to remove AWS resources instead of deleting them manually from the AWS Console.
+# Caution
+
+> **Do not manually delete files or directories created and managed by the application.**
+
+- Avoid manually deleting files listed in `.gitignore`, as some of them may be automatically generated and required by the deployment process.
+- Do not manually remove AWS resources created by the project unless necessary.
+- Use the following command to remove the infrastructure:
+
+```bash
+python3 destroy.py
+```
+
+Using the project's cleanup script helps ensure that resources created during deployment are removed in the expected order.

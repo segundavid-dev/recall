@@ -18,13 +18,6 @@ variable "vpc_id" {
   type = string
 }
 
-# variable "target_domain_name" {
-#   type = string
-# }
-
-# variable "target_hosted_zone_id" {
-#   type = string
-# }
 
 variable "cloudfront_domain_name" {
   type = string
@@ -46,7 +39,9 @@ variable "internal_alb_zone_id" {
   type = string
 }
 
-
+variable "project_name" {
+  type = string
+}
 # -------------------------------------------------------
 # GLOBAL TAGS
 # -------------------------------------------------------

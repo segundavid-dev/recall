@@ -1,5 +1,5 @@
 
-bastion_key_name       = "r-bastion-sv-key"
+bastion_key_name        = "r-bastion-sv-key"
 bastion_public_key_path = ".ssh_keys/r-bastion-sv-key.pub"
 
 backend_key_name        = "r-backend-sv-key"
