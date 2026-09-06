@@ -3,19 +3,6 @@ data "aws_route53_zone" "existing_hosted_zone" {
   private_zone = false
 }
 
-# resource "aws_route53_record" "api_gateway_dns" {
-#   zone_id = data.aws_route53_zone.existing_hosted_zone.zone_id
-#   name    = "backend.${var.hosted_zone_name}"
-#   type    = "A"
-
-#   alias {
-#     name                   = var.target_domain_name
-#     zone_id                = var.target_hosted_zone_id
-#     evaluate_target_health = false
-#   }
-# }
-
-
 resource "aws_route53_record" "cloudfront_root" {
   zone_id = data.aws_route53_zone.existing_hosted_zone.zone_id
   name    = var.hosted_zone_name
@@ -30,7 +17,7 @@ resource "aws_route53_record" "cloudfront_root" {
 
 resource "aws_route53_record" "cloudfront_www" {
   zone_id = data.aws_route53_zone.existing_hosted_zone.zone_id
-  name    = "www.${var.hosted_zone_name}"
+  name    = "${var.project_name}.${var.hosted_zone_name}"
   type    = "A"
 
   alias {
@@ -69,24 +56,10 @@ resource "aws_route53_record" "acm_validation" {
 
 
 
-
-# resource "aws_route53_zone" "private" {
-#   name = "internal.${var.hosted_zone_name}"
-
-#   vpc {
-#     vpc_id = var.vpc_id
-#   }
-
-#   tags = merge(var.tags, {
-#     Name = "internal.${var.hosted_zone_name}"
-#   })
-# }
-
-
 resource "aws_route53_record" "backend" {
   zone_id = data.aws_route53_zone.existing_hosted_zone.zone_id
 
-  name = "internal.${var.hosted_zone_name}"
+  name = "internal.${var.project_name}.${var.hosted_zone_name}"
   type = "A"
 
   alias {

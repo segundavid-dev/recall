@@ -13,6 +13,10 @@ variable "cert_name" {
   default = "ssl_cert"
 }
 
+variable "project_name" {
+  type = string
+}
+
 # -------------------------------------------------------
 # GLOBAL TAGS
 # -------------------------------------------------------

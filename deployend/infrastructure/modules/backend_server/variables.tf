@@ -29,6 +29,10 @@ variable "backend_public_key_name" {
   type = string
 }
 
+variable "user_data" {
+  type = string
+}
+
 # GLOBAL TAGS
 variable "tags" {
   type = map(string)

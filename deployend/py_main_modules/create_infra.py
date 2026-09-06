@@ -35,7 +35,9 @@ if os.path.isdir(tmp_sv_ssh_keys_dir):
 
 tmp_sv_config_key = "../fe_tmp_sv/tmp_sv_config/.tmp_sv_key"
 tmp_sv_config_inventory = "../fe_tmp_sv/tmp_sv_config/inventory"
-generated_files = [tmp_sv_config_key, tmp_sv_config_inventory]
+tmp_be_sv_config_key = "../fe_tmp_sv/tmp_backend_sv_config/.tmp_sv_key"
+tmp_be_sv_config_inventory = "../fe_tmp_sv/tmp_backend_sv_config/inventory"
+generated_files = [tmp_sv_config_key, tmp_sv_config_inventory, tmp_be_sv_config_key, tmp_be_sv_config_inventory]
 for filepath in generated_files:
     if os.path.exists(filepath):
         os.remove(filepath)

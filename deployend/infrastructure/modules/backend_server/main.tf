@@ -8,6 +8,7 @@ resource "aws_instance" "recall_backend_server" {
   key_name               = aws_key_pair.recall_backend_key.key_name
   vpc_security_group_ids = var.security_group_ids
   subnet_id              = var.private_subnet_id
+  user_data              = var.user_data
 
   root_block_device {
     volume_size = 20

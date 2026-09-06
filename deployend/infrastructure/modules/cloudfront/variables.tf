@@ -4,7 +4,6 @@ variable "origin_domain_name" {
 
 variable "aliases" {
   type    = list(string)
-  default = ["www.chisom.biz"]
 }
 
 variable "acm_certificate_arn" {

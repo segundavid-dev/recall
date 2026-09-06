@@ -15,6 +15,4 @@ run(["aws", "s3", "sync", "./frontend/dist", f"s3://{s3_bucket_name}"], check=Tr
 
 run(["python3", "create_launch_temp.py"], cwd="deployend/py_main_modules", check=True)
 
-run(["python3", "backend_userdata.py"], cwd="deployend/py_main_modules", check=True)
-
 run(["python3", "create_infra.py"], cwd="deployend/py_main_modules", check=True)

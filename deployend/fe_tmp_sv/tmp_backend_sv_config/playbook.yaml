@@ -91,6 +91,7 @@
           FIREBASE_SERVICE_ACCOUNT_JSON={{ backend.firebase_service_account_json }}
           COGNEE_VECTOR_DB_URL={{ backend.cognee_vector_db_url }}
           COGNEE_GRAPH_DB_URL={{ backend.cognee_graph_db_url }}
+          FRONTEND_URL1={{ backend.frontend_url }}
 
     - name: Set ownership on application directory
       ansible.builtin.file:
