@@ -21,7 +21,7 @@ The architecture includes networking, compute, load balancing, DNS management, S
 
 The diagram below illustrates the AWS infrastructure used to deploy the Recall application.
 
-![AWS Infrastructure Plan](./images/recall.png)
+![AWS Infrastructure Plan](./documentation/images/recall.png)
 
 ---
 
@@ -31,7 +31,7 @@ The following diagram illustrates the network ports used by the AWS services and
 
 It shows how traffic moves between users, load balancers, frontend servers, backend services, and other infrastructure components.
 
-![Network Ports and Traffic Flow](./images/recall-ports.png)
+![Network Ports and Traffic Flow](./documentation/images/recall-ports.png)
 
 ---
 
