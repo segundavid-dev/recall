@@ -10,6 +10,7 @@
     },
 
     "backend" : {
+        "frontend_url" : "",
         "database_url" : "postgresql://postgres:postgres@db:5432/recall",
         "redis_url" : "redis://redis:6379/0",
         "openai_api_key" : "",
@@ -25,6 +26,7 @@
     "deployend" : {
         "existing_s3_bucket" : "",
         "existing_route53_public_hosted_zone" : "",
-        "domain_name" : ""
+        "domain_name" : "",
+        "project_name_lowercase" : "recall"
     }
 }
